@@ -37,3 +37,18 @@
 .story-user {
   display: block;
 }
+
+.iconButton {
+  background-color: #f6f6ef;
+  border: none;
+  
+}
+
+.iconButton:hover {
+  border: none;
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+.favorited {
+  background-color: grey;
+}

@@ -20,6 +20,7 @@ const $submitButton = $("#submit-button");
 const $submitAuthor = $("#submit-author");
 const $submitTitle = $("#submit-title");
 const $submitURL = $("#submit-url");
+const $storiesContainer = $(".stories-container");
 
 
 /** To make it easier for individual components to show just themselves, this

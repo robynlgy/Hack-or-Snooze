@@ -24,9 +24,8 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
-  return $(`
-      <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
+  return $(` <li id="${story.storyId}">
+  <button class="iconButton"><i class="fa-regular fa-star"  ></i></button> <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
@@ -71,4 +70,14 @@ async function formSubmitAddStory() {
 $submitForm.on("submit", async (e) => {
   await formSubmitAddStory();
   getAndShowStoriesOnStart();
+});
+
+$storiesContainer.on("click", ".iconButton", function => {
+  console.log("im here");
+  console.log(evt.target);
+  console.log(evt.target.tagName);
+  if (evt.target.tagName !== "BUTTON") {
+    $(evt.target).toggleClass("favorited");
+  }
+  
 });
