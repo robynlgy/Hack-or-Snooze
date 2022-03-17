@@ -7,6 +7,7 @@ let storyList;
 
 async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
+  console.log("storylist is",storyList);
   $storiesLoadingMsg.remove();
 
   putStoriesOnPage();
@@ -54,7 +55,7 @@ function putStoriesOnPage() {
 
 /** Collects submit form input and adds story to page when user submits.*/
 
-function formSubmitAddStory() {
+async function formSubmitAddStory() {
   const formInputs = {
     "author": $submitAuthor.val(),
     "title": $submitTitle.val(),
@@ -62,8 +63,12 @@ function formSubmitAddStory() {
   };
 
   const addedStory = await storyList.addStory(currentUser, formInputs);
+  //storyList = await StoryList.getStories();
   console.log("addedStory...", addedStory);
 };
 
 
-$submitForm.on("submit", formSubmitAddStory);
+$submitForm.on("submit", async (e) => {
+  await formSubmitAddStory();
+  getAndShowStoriesOnStart();
+});

@@ -25,7 +25,8 @@ class Story {
 
   getHostName() {
     // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+   return new URL(this.url).hostname;
+
   }
 }
 
@@ -87,7 +88,8 @@ class StoryList {
       method: "POST",
       data: { "token": token, "story": storyObj }
     });
-    return new Story(response);
+    console.log(response.data.story);
+    return new Story(response.data.story);
   }
 }
 
