@@ -7,7 +7,7 @@ let storyList;
 
 async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
-  console.log("storylist is",storyList);
+  console.log("storylist is", storyList);
   $storiesLoadingMsg.remove();
 
   putStoriesOnPage();
@@ -24,8 +24,9 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
-  return $(` <li id="${story.storyId}">
-  <button class="iconButton"><i class="fa-regular fa-star"  ></i></button> <a href="${story.url}" target="a_blank" class="story-link">
+  return $(`<li id="${story.storyId}">
+  <button class="iconButton"><i class="fa-regular fa-star"></i></button> <a href="${story.url}"
+   target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
@@ -66,18 +67,28 @@ async function formSubmitAddStory() {
   console.log("addedStory...", addedStory);
 };
 
-
+/** When form is submitted, add story to API and update UI to show new story. */
 $submitForm.on("submit", async (e) => {
   await formSubmitAddStory();
   getAndShowStoriesOnStart();
 });
 
-$storiesContainer.on("click", ".iconButton", function => {
-  console.log("im here");
-  console.log(evt.target);
-  console.log(evt.target.tagName);
+/** When favorite star is clicked, add "favorited" class to star icon.*/
+$storiesContainer.on("click", ".iconButton", (evt) => {
+  evt.preventDefault();
+  console.log(evt.target, "evt target ");
   if (evt.target.tagName !== "BUTTON") {
-    $(evt.target).toggleClass("favorited");
+    const targetStoryId = Story.getStoryId(evt.target);
+    const story = storyList.stories.filter(story => story.storyId === targetStoryId);
+    if (!evt.target.classList.contains("favorited")) {
+      $(evt.target).toggleClass("favorited");
+      currentUser.addFavorite(story[0]);
+    } else {
+      $(evt.target).toggleClass("favorited");
+      currentUser.removeFavorite(story[0]);
+    }
   }
-  
-});
+}
+);
+
+

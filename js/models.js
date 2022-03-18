@@ -12,7 +12,7 @@ class Story {
    *   - {title, author, url, username, storyId, createdAt}
    */
 
-  constructor({ storyId, title, author, url, username, createdAt}) {
+  constructor({ storyId, title, author, url, username, createdAt }) {
     this.storyId = storyId;
     this.title = title;
     this.author = author;
@@ -25,8 +25,12 @@ class Story {
 
   getHostName() {
     // UNIMPLEMENTED: complete this function!
-   return new URL(this.url).hostname;
+    return new URL(this.url).hostname;
 
+  }
+
+  static getStoryId(icon) {
+    return icon.parentElement.parentElement.id;
   }
 }
 
@@ -179,14 +183,23 @@ class User {
     );
   }
 
-  addFavorite (story) {
-    this.favorites.push(story);
+  async addFavorite(story) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${currentUser.username}/favorites/${story.storyId}`,
+      method: "POST",
+      data: { "token": `${currentUser.loginToken}` }
+    });
+    // console.log("favorites response", response.data.user.favorites);
   }
 
-  
 
-  removeFavorite (story) {
-
+  async removeFavorite(story) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${currentUser.username}/favorites/${story.storyId}`,
+      method: "DELETE",
+      data: { "token": `${currentUser.loginToken}` }
+    });
+    // console.log("remove favorites response", response.data.user.favorites);
   }
 
   /** When we already have credentials (token & username) for a user,
@@ -218,4 +231,33 @@ class User {
       return null;
     }
   }
+
+  /** Check for stories on homepage that matches with favorited stories
+   * and update HTML class of favorited button
+   */
+  updateFavoritesOnRefresh() {
+    const favorites = this.favorites;
+    // for home page
+    for (let story of storyList.stories) {
+      const storyListID = story.storyId;
+      for (let favorite of favorites) {
+        const favoriteID = favorite.storyId;
+        if (storyListID === favoriteID) {
+          const $icon = $(`li#${favoriteID} i.fa-star`);
+          // const $icon = $favoriteLI.children().eq(0).children().eq(0);
+          $icon.addClass("favorited");
+
+        }
+      }
+    }
+  }
 }
+
+  //get favorites array from currentUser.favorites
+  // for home page
+  // loop through storyList for same id as favorites
+  // toggle class "favorites" on the icon if matches
+  // for favorites page
+  // update UI for all of favorites
+
+  // TODO: replace line 247 to find closest down for <i>..</i>
