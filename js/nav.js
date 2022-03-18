@@ -43,6 +43,17 @@ function navSubmitClick() {
   $submitForm.show();
 }
 
+function navFavoriteClick() {
+  $allStoriesList.hide();
+  putFavoriteStoriesOnPage();
+  currentUser.updateFavoritesOnRefresh();
+}
+
+$navFavorites.on("click", navFavoriteClick);
+
+
+
+
 $navSubmit.on("click", navSubmitClick);
 
 

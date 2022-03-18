@@ -189,7 +189,8 @@ class User {
       method: "POST",
       data: { "token": `${currentUser.loginToken}` }
     });
-    // console.log("favorites response", response.data.user.favorites);
+    this.favorites = response.data.user.favorites;
+    console.log("favorites on add",this.favorites);
   }
 
 
@@ -199,6 +200,8 @@ class User {
       method: "DELETE",
       data: { "token": `${currentUser.loginToken}` }
     });
+    this.favorites = response.data.user.favorites;
+    console.log("favorites on delete",this.favorites);
     // console.log("remove favorites response", response.data.user.favorites);
   }
 

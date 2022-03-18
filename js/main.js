@@ -21,6 +21,9 @@ const $submitAuthor = $("#submit-author");
 const $submitTitle = $("#submit-title");
 const $submitURL = $("#submit-url");
 const $storiesContainer = $(".stories-container");
+const $navFavorites = $("#nav-favorites");
+const $favoriteStories = $("#favorite-stories-list");
+const $navAll = $("#nav-all");
 
 
 /** To make it easier for individual components to show just themselves, this
@@ -46,10 +49,16 @@ async function start() {
   await checkForRememberedUser();
   await getAndShowStoriesOnStart();
   currentUser.updateFavoritesOnRefresh();
-
+  console.log("page refresh");
   // if we got a logged-in user
   if (currentUser) updateUIOnUserLogin();
 }
+
+$navAll.on("click", async() => {
+  await checkForRememberedUser();
+  await getAndShowStoriesOnStart();
+  currentUser.updateFavoritesOnRefresh();
+});
 
 // Once the DOM is entirely loaded, begin the app
 

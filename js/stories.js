@@ -52,6 +52,20 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
+function putFavoriteStoriesOnPage() {
+  console.debug("putFavoriteStoriesOnPage");
+  console.log("current user favorites", currentUser.favorites);
+  $favoriteStories.empty();
+  // loop through all of our favorite stories and generate HTML for them
+  for (let story of currentUser.favorites) {
+    console.log("what story", story);
+    const newStory = new Story(story);
+    const $story = generateStoryMarkup(newStory);
+    $favoriteStories.append($story);
+  }
+  $favoriteStories.show();
+}
+
 
 /** Collects submit form input and adds story to page when user submits.*/
 
@@ -74,7 +88,7 @@ $submitForm.on("submit", async (e) => {
 });
 
 /** When favorite star is clicked, add "favorited" class to star icon.*/
-$storiesContainer.on("click", ".iconButton", (evt) => {
+$storiesContainer.on("click", ".iconButton", async (evt) => {
   evt.preventDefault();
   console.log(evt.target, "evt target ");
   if (evt.target.tagName !== "BUTTON") {
@@ -82,7 +96,9 @@ $storiesContainer.on("click", ".iconButton", (evt) => {
     const story = storyList.stories.filter(story => story.storyId === targetStoryId);
     if (!evt.target.classList.contains("favorited")) {
       $(evt.target).toggleClass("favorited");
-      currentUser.addFavorite(story[0]);
+      await currentUser.addFavorite(story[0]);
+      
+      putFavoriteStoriesOnPage();
     } else {
       $(evt.target).toggleClass("favorited");
       currentUser.removeFavorite(story[0]);
